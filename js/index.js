@@ -1,4 +1,4 @@
-import { fighters, weapons } from "./data.js";
+import { fighters, weapons, robot } from "./data.js";
 
 console.log(`Ecco i partecipanti al torneo Boolkaichi:`);
 console.log(fighters);
@@ -41,3 +41,24 @@ function filterWeakFighters(fighters) {
 filterWeakFighters(fighters);
 
 console.log(qualifiedFighters);
+
+// Fase 4 - ⚔️ Combattimento: i combattimenti si svolgeranno tra un partecipante e il successivo dell'elenco, assicurandosi che ognuno combatta una sola volta. 
+console.log("I combattenti si sfidano!");
+const winners = [];
+function fightingPhase(qualifiedFighters) {
+    if (qualifiedFighters.length % 2 != 0) qualifiedFighters.push(robot);
+    
+    for (let i = 0; i < qualifiedFighters.length - 1; i = i + 2) {
+        console.log(`${qualifiedFighters[i].name} e ${qualifiedFighters[i + 1].name} si sfidano!`)
+        if ((qualifiedFighters[i].power > qualifiedFighters[i + 1].power) || qualifiedFighters[i].power === qualifiedFighters[i + 1].power ) {
+            console.log(`Vince ${qualifiedFighters[i].name}!`);
+            winners.push(qualifiedFighters[i]);
+        } else if (qualifiedFighters[i].power < qualifiedFighters[i + 1].power) {
+            console.log(`Vince ${qualifiedFighters[i + 1].name}!`);
+            winners.push(qualifiedFighters[i + 1]);
+        }
+    }
+}
+
+fightingPhase(qualifiedFighters);
+console.log(winners)
