@@ -1,0 +1,1 @@
+import { fighters, weapons } from "./data.js";
