@@ -58,7 +58,9 @@ function fightingPhase(qualifiedFighters) {
             winners.push(qualifiedFighters[i + 1]);
         }
     }
+
+    winners.sort((a, b) => b.power - a.power)
+    return winners.filter((winner, index) => index < 3);
 }
 
-fightingPhase(qualifiedFighters);
-console.log(winners)
+console.log(fightingPhase(qualifiedFighters))
