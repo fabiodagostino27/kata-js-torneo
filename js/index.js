@@ -2,10 +2,11 @@ import { fighters, weapons, robot } from "./data.js";
 
 const startBtn = document.getElementById("start");
 const tournament = document.getElementById("tournament");
+const winnersList = document.getElementById("winners");
 const phase1Btn = document.getElementById("phase1");
 const phase2Btn = document.getElementById("phase2");
 const phase3Btn = document.getElementById("phase3");
-const phase4 = document.getElementById("phase4");
+const phase4Btn = document.getElementById("phase4");
 const phasesBtns = document.querySelectorAll(".phases");
 
 let tempFighters;
@@ -42,12 +43,18 @@ phase3Btn.addEventListener("click", () => {
     disableAllButOneBtn("phase4")
 })
 
+phase4Btn.addEventListener("click", () => {
+    fighting(tempFighters);
+    disableAllButOneBtn("");
+})
+
 // START
 function startGame(fightersArr, wepaonsArr) {
     tempFighters = JSON.parse(JSON.stringify(fightersArr));
     tempWeapons = JSON.parse(JSON.stringify(wepaonsArr));
     console.log(`Ecco i partecipanti al torneo Boolkaichi:`);
     tournament.innerHTML = "";
+    winnersList.innerHTML = "";
     tournament.innerHTML += "<h3>Ecco i partecipanti al torneo Boolkaichi: </h3>";
 
     fightersArr.forEach(fighter => {
@@ -96,26 +103,32 @@ function qualification(fightersArr) {
     fightersArr.forEach(fighter => tournament.innerHTML += `<li>${fighter.name}, potere: ${fighter.power}</li>`);
 }
 
-
 // Fase 4 - ⚔️ Combattimento: i combattimenti si svolgeranno tra un partecipante e il successivo dell'elenco, assicurandosi che ognuno combatta una sola volta. 
-console.log("I combattenti si sfidano!");
-const winners = [];
-function fighting(qualifiedFighters) {
-    if (qualifiedFighters.length % 2 != 0) qualifiedFighters.push(robot);
-
-    for (let i = 0; i < qualifiedFighters.length - 1; i = i + 2) {
-        console.log(`${qualifiedFighters[i].name} e ${qualifiedFighters[i + 1].name} si sfidano!`)
-        if ((qualifiedFighters[i].power > qualifiedFighters[i + 1].power) || qualifiedFighters[i].power === qualifiedFighters[i + 1].power) {
-            console.log(`Vince ${qualifiedFighters[i].name}!`);
-            winners.push(qualifiedFighters[i]);
-        } else if (qualifiedFighters[i].power < qualifiedFighters[i + 1].power) {
-            console.log(`Vince ${qualifiedFighters[i + 1].name}!`);
-            winners.push(qualifiedFighters[i + 1]);
+function fighting(fightersArr) {
+    let winners = [];
+    console.log("I combattenti si sfidano!");
+    tournament.innerHTML = "";
+    tournament.innerHTML += "<h3>I combattenti si sfidano: </h3>";
+    for (let i = 0; i < fightersArr.length - 1; i = i + 2) {
+        console.log(`${fightersArr[i].name} e ${fightersArr[i + 1].name} si sfidano!`);
+        if ((fightersArr[i].power > fightersArr[i + 1].power) || fightersArr[i].power === fightersArr[i + 1].power) {
+            console.log(`Vince ${fightersArr[i].name}!`);
+            tournament.innerHTML += `<li>${fightersArr[i].name} e ${fightersArr[i + 1].name} si sfidano! <str>Vince ${fightersArr[i].name}!</str></li>`
+            winners.push(fightersArr[i]);
+        } else if (fightersArr[i].power < fightersArr[i + 1].power) {
+            console.log(`Vince ${fightersArr[i + 1].name}!`);
+            tournament.innerHTML += `<li>${fightersArr[i].name} e ${fightersArr[i + 1].name} si sfidano! <str>Vince ${fightersArr[i + 1].name}!</str></li>`
+            winners.push(fightersArr[i + 1]);
         }
     }
 
+    console.log(winners)
     winners.sort((a, b) => b.power - a.power)
-    return winners.filter((winner, index) => index < 3);
+    winners = winners.filter((winner, index) => index < 3);
+    winnersList.innerHTML += "<h3>I vincitori del torneo sono: </h3>"
+    winners.forEach(winner => {
+        winnersList.innerHTML += `<li>${winner.name}</li>`
+    })
 }
 
 
