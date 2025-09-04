@@ -1,41 +1,47 @@
 import { fighters, weapons, robot } from "./data.js";
 
-const startButton = document.getElementById("start");
+const startBtn = document.getElementById("start");
 const fightersList = document.getElementById("fighters");
-const phase1 = document.getElementById("phase1");
+const phase1Btn = document.getElementById("phase1");
 const phase2 = document.getElementById("phase2");
 const phase3 = document.getElementById("phase3");
 const phase4 = document.getElementById("phase4");
 
-startButton.addEventListener("click", () => {
+startBtn.addEventListener("click", () => {
     startGame(tempFighters);
+})
 
+phase1Btn.addEventListener("click", () => {
+    weaponsChoice(tempFighters, tempWeapons);
 })
 
 const tempFighters = JSON.parse(JSON.stringify(fighters));
 const tempWeapons = JSON.parse(JSON.stringify(weapons));
 
+// START
 function startGame(fightersArr) {
-    fightersList.innerHTML += "<h3>Ecco i partecipanti al torneo Boolkaichi: </h3>"
+    console.log(`Ecco i partecipanti al torneo Boolkaichi:`);
+    fightersList.innerHTML += "<h3>Ecco i partecipanti al torneo Boolkaichi: </h3>";
 
     fightersArr.forEach(fighter => {
-        fightersList.innerHTML += `<li>${fighter.name}</li>`
+        fightersList.innerHTML += `<li>${fighter.name}, potere: ${fighter.power}</li>`
     })
-    console.log(`Ecco i partecipanti al torneo Boolkaichi:`);
     console.log(tempFighters);
 }
 
 // Fase 1 - 🔥 Scelta dell'Arma: ogni combattente sceglierà casualmente un'arma dalla relativa lista. Una volta scelta, un'arma non sarà più disponibile per i successivi combattenti.
-
-function weaponsChoice(tempFighters, tempWeapons) {
+function weaponsChoice(fightersArr, weaponsArr) {
+    fightersList.innerHTML = "";
     console.log("I combattenti scelgono un'arma!");
-    tempFighters.forEach(fighter => {
-        const randomIndex = Math.floor(Math.random() * tempWeapons.length);
-        const randomWeapon = tempWeapons[randomIndex];
+    fightersList.innerHTML += "<h3>Ogni combattente sceglie un'arma: </h3>";
+    fightersArr.forEach(fighter => {
+        const randomIndex = Math.floor(Math.random() * weaponsArr.length);
+        const randomWeapon = weaponsArr[randomIndex];
         fighter.weapon = randomWeapon.name;
         fighter.power += randomWeapon.power;
-        tempWeapons.splice(randomIndex, 1);
+        weaponsArr.splice(randomIndex, 1);
         console.log(`${fighter.name} sceglie ${fighter.weapon} portando il suo potere a ${fighter.power}!`)
+        fightersList.innerHTML += `<li>${fighter.name} sceglie ${fighter.weapon} portando il suo potere a ${fighter.power}!</li>`;
     });
 }
 
@@ -85,21 +91,6 @@ function fightingPhase(qualifiedFighters) {
 
 console.log(fightingPhase(qualifiedFighters))
 
-phase1.addEventListener("click", () => {
-    weaponsChoice(tempFighters, tempWeapons);
-})
-
-phase2.addEventListener("click", () => {
-    training(tempFighters);
-})
-
-phase3.addEventListener("click", () => {
-    weaponsChoice(tempFighters, tempWeapons);
-})
-
-phase1.addEventListener("click", () => {
-    weaponsChoice(tempFighters, tempWeapons);
-})
 
 
 
