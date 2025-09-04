@@ -1,25 +1,45 @@
 import { fighters, weapons, robot } from "./data.js";
 
 const startBtn = document.getElementById("start");
-const fightersList = document.getElementById("fighters");
+const tournament = document.getElementById("tournament");
 const phase1Btn = document.getElementById("phase1");
 const phase2Btn = document.getElementById("phase2");
-const phase3 = document.getElementById("phase3");
+const phase3Btn = document.getElementById("phase3");
 const phase4 = document.getElementById("phase4");
+const phasesBtns = document.querySelectorAll(".phases");
 
 let tempFighters;
 let tempWeapons;
 
+function disableAllButOneBtn(phase) {
+    phasesBtns.forEach(btn => {
+        if (btn.id === phase) {
+            btn.disabled = false;
+        } else {
+            btn.disabled = true;
+        }
+    })
+}
+
 startBtn.addEventListener("click", () => {
     startGame(fighters, weapons);
+    disableAllButOneBtn("phase1");
+    startBtn.innerText = "RESTART";
 })
 
 phase1Btn.addEventListener("click", () => {
     weaponsChoice(tempFighters, tempWeapons);
+    disableAllButOneBtn("phase2");
 })
 
 phase2Btn.addEventListener("click", () => {
     training(tempFighters);
+    disableAllButOneBtn("phase3");
+})
+
+phase3Btn.addEventListener("click", () => {
+    qualification(tempFighters);
+    disableAllButOneBtn("phase4")
 })
 
 // START
@@ -27,10 +47,11 @@ function startGame(fightersArr, wepaonsArr) {
     tempFighters = JSON.parse(JSON.stringify(fightersArr));
     tempWeapons = JSON.parse(JSON.stringify(wepaonsArr));
     console.log(`Ecco i partecipanti al torneo Boolkaichi:`);
-    fightersList.innerHTML += "<h3>Ecco i partecipanti al torneo Boolkaichi: </h3>";
+    tournament.innerHTML = "";
+    tournament.innerHTML += "<h3>Ecco i partecipanti al torneo Boolkaichi: </h3>";
 
     fightersArr.forEach(fighter => {
-        fightersList.innerHTML += `<li>${fighter.name}, potere: ${fighter.power}</li>`
+        tournament.innerHTML += `<li>${fighter.name}, potere: ${fighter.power}</li>`
     })
     console.log(tempFighters);
 }
@@ -38,8 +59,8 @@ function startGame(fightersArr, wepaonsArr) {
 // Fase 1 - 🔥 Scelta dell'Arma: ogni combattente sceglierà casualmente un'arma dalla relativa lista. Una volta scelta, un'arma non sarà più disponibile per i successivi combattenti.
 function weaponsChoice(fightersArr, weaponsArr) {
     console.log("I combattenti scelgono un'arma!");
-    fightersList.innerHTML = "";
-    fightersList.innerHTML += "<h3>Ogni combattente sceglie un'arma: </h3>";
+    tournament.innerHTML = "";
+    tournament.innerHTML += "<h3>Ogni combattente sceglie un'arma: </h3>";
     fightersArr.forEach(fighter => {
         const randomIndex = Math.floor(Math.random() * weaponsArr.length);
         const randomWeapon = weaponsArr[randomIndex];
@@ -47,7 +68,7 @@ function weaponsChoice(fightersArr, weaponsArr) {
         fighter.power += randomWeapon.power;
         weaponsArr.splice(randomIndex, 1);
         console.log(`${fighter.name} sceglie ${fighter.weapon} portando il suo potere a ${fighter.power}!`)
-        fightersList.innerHTML += `<li>${fighter.name} sceglie ${fighter.weapon} portando il suo potere a ${fighter.power}!</li>`;
+        tournament.innerHTML += `<li>${fighter.name} sceglie ${fighter.weapon} portando il suo potere a ${fighter.power}!</li>`;
     });
     console.log(fightersArr);
 }
@@ -55,30 +76,31 @@ function weaponsChoice(fightersArr, weaponsArr) {
 // Fase 2 - 💪 Allenamento: ogni combattente si sottoporrà ad un allenamento che incrementerà (o forse no) la sua potenza, moltiplicandola per un numero casuale tra 1 e 100.
 function training(fightersArr) {
     console.log("I combattenti si allenano!");
-    fightersList.innerHTML = "";
-    fightersList.innerHTML += "<h3>I combattenti si allenano: </h3>";
+    tournament.innerHTML = "";
+    tournament.innerHTML += "<h3>I combattenti si allenano: </h3>";
     fightersArr.forEach(fighter => {
         fighter.power *= Math.floor(Math.random() * 101);
         console.log(`La potenza di ${fighter.name} arriva a ${fighter.power}!`)
-        fightersList.innerHTML += `<li>La potenza di ${fighter.name} arriva a ${fighter.power}!</li>`;
+        tournament.innerHTML += `<li>La potenza di ${fighter.name} arriva a ${fighter.power}!</li>`;
     })
 }
 
 // Fase 3 -  🎯 Qualificazione: escludiamo dal torneo chi, dopo l'allenamento non è riuscito a raggiungere una potenza di almeno 2000.
-console.log("I combattenti che non hanno raggiunto una potenza di 2000 sono stati esclusi, ecco quindi la lista finale: ")
-
-let qualifiedFighters = [];
-function filterWeakFighters(fighters) {
-    qualifiedFighters = tempFighters.filter(fighter => fighter.power > 2000);
+function qualification(fightersArr) {
+    console.log("I combattenti che non hanno raggiunto una potenza di 2000 sono stati esclusi, ecco quindi la lista finale: ")
+    tournament.innerHTML = "";
+    tournament.innerHTML += "<h3>I combattenti che non hanno raggiunto una potenza di 2000 sono stati esclusi, ecco quindi la lista finale: </h3>";
+    fightersArr = fightersArr.filter(fighter => fighter.power > 2000);
+    if (fightersArr.length % 2 != 0) fightersArr.push(robot);
+    console.log(fightersArr);
+    fightersArr.forEach(fighter => tournament.innerHTML += `<li>${fighter.name}, potere: ${fighter.power}</li>`);
 }
-filterWeakFighters(tempFighters);
 
-console.log(qualifiedFighters);
 
 // Fase 4 - ⚔️ Combattimento: i combattimenti si svolgeranno tra un partecipante e il successivo dell'elenco, assicurandosi che ognuno combatta una sola volta. 
 console.log("I combattenti si sfidano!");
 const winners = [];
-function fightingPhase(qualifiedFighters) {
+function fighting(qualifiedFighters) {
     if (qualifiedFighters.length % 2 != 0) qualifiedFighters.push(robot);
 
     for (let i = 0; i < qualifiedFighters.length - 1; i = i + 2) {
@@ -96,7 +118,7 @@ function fightingPhase(qualifiedFighters) {
     return winners.filter((winner, index) => index < 3);
 }
 
-console.log(fightingPhase(qualifiedFighters))
+
 
 
 
