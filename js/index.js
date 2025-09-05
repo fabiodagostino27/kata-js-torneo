@@ -1,7 +1,9 @@
 import { fighters, weapons, robot } from "./data.js";
 
 const startBtn = document.getElementById("start");
-const tournament = document.getElementById("tournament");
+const title = document.getElementById("title");
+const tableHead = document.getElementById("tableHead");
+const tableBody = document.getElementById("tableBody");
 const winnersList = document.getElementById("winners");
 const phase1Btn = document.getElementById("phase1");
 const phase2Btn = document.getElementById("phase2");
@@ -53,12 +55,15 @@ function startGame(fightersArr, wepaonsArr) {
     tempFighters = JSON.parse(JSON.stringify(fightersArr));
     tempWeapons = JSON.parse(JSON.stringify(wepaonsArr));
     console.log(`Ecco i partecipanti al torneo Boolkaichi:`);
-    tournament.innerHTML = "";
+    title.innerHTML = "";
+    tableHead.innerHTML = "";
+    tableBody.innerHTML = "";
     winnersList.innerHTML = "";
-    tournament.innerHTML += "<h3>Ecco i partecipanti al torneo Boolkaichi: </h3>";
+    title.innerHTML += "<h3>Ecco i partecipanti al torneo Boolkaichi: </h3>";
 
+    tableHead.innerHTML += `<th>Nome</th><th>Potere</th>`
     fightersArr.forEach(fighter => {
-        tournament.innerHTML += `<li>${fighter.name}, potere: ${fighter.power}</li>`
+        tableBody.innerHTML += `<td>${fighter.name}</td><td>${fighter.power}</td>`
     })
     console.log(tempFighters);
 }
