@@ -102,7 +102,8 @@ const weapons = [
 
 const robot = {
     name: 'Robot',
-    power: 4000
+    power: 4000,
+    weapon: "/"
 }
 
 export {
