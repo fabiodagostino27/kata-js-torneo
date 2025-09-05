@@ -4,6 +4,7 @@ const startBtn = document.getElementById("start");
 const title = document.getElementById("title");
 const tableHead = document.getElementById("tableHead");
 const tableBody = document.getElementById("tableBody");
+const winnersTitle = document.getElementById("winnersTitle");
 const winnersList = document.getElementById("winners");
 const phase1Btn = document.getElementById("phase1");
 const phase2Btn = document.getElementById("phase2");
@@ -58,6 +59,7 @@ function startGame(fightersArr, wepaonsArr) {
     title.innerHTML = "";
     tableHead.innerHTML = "";
     tableBody.innerHTML = "";
+    winnersTitle.innerText = "";
     winnersList.innerHTML = "";
     title.innerHTML += "<h3>Ecco i partecipanti al torneo Boolkaichi: </h3>";
 
@@ -106,33 +108,36 @@ function qualification(fightersArr) {
     if (fightersArr.length % 2 != 0) fightersArr.push(robot);
     tableBody.innerHTML = "";
     console.log(fightersArr);
-    fightersArr.forEach(fighter => tableBody.innerHTML += `<tr><td>${fighter.name}</td><td class="table-active">${fighter.power}</td><td>${fighter.weapon}</td></tr>`);
+    fightersArr.forEach(fighter => tableBody.innerHTML += `<tr><td>${fighter.name}</td><td>${fighter.power}</td><td>${fighter.weapon}</td></tr>`);
 }
 
 // Fase 4 - ⚔️ Combattimento: i combattimenti si svolgeranno tra un partecipante e il successivo dell'elenco, assicurandosi che ognuno combatta una sola volta. 
 function fighting(fightersArr) {
     let winners = [];
     console.log("I combattenti si sfidano!");
-    tournament.innerHTML = "";
-    tournament.innerHTML += "<h3>I combattenti si sfidano: </h3>";
+    title.innerHTML = "<h3>I combattenti si sfidano: </h3>";
+    tableHead.innerHTML = `<tr><th>Combattente 1</th><th>Combattente 2</th><th>Vincitore</th></tr>`;
+    tableBody.innerHTML = "";
     for (let i = 0; i < fightersArr.length - 1; i = i + 2) {
         console.log(`${fightersArr[i].name} e ${fightersArr[i + 1].name} si sfidano!`);
         if ((fightersArr[i].power > fightersArr[i + 1].power) || fightersArr[i].power === fightersArr[i + 1].power) {
             console.log(`Vince ${fightersArr[i].name}!`);
-            tournament.innerHTML += `<li>${fightersArr[i].name} e ${fightersArr[i + 1].name} si sfidano! <str>Vince ${fightersArr[i].name}!</str></li>`
+            tableBody.innerHTML += `<tr><td>${fightersArr[i].name}</td><td>${fightersArr[i + 1].name}</td><td class="table-active">${fightersArr[i].name}</td></tr>`
             winners.push(fightersArr[i]);
         } else if (fightersArr[i].power < fightersArr[i + 1].power) {
             console.log(`Vince ${fightersArr[i + 1].name}!`);
-            tournament.innerHTML += `<li>${fightersArr[i].name} e ${fightersArr[i + 1].name} si sfidano! <str>Vince ${fightersArr[i + 1].name}!</str></li>`
+            tableBody.innerHTML += `<tr><td>${fightersArr[i].name}</td><td>${fightersArr[i + 1].name}</td><td class="table-active">${fightersArr[i + 1].name}</td></tr>`
             winners.push(fightersArr[i + 1]);
         }
     }
 
-    console.log(winners)
-    winners.sort((a, b) => b.power - a.power)
+    console.log(winners);
+    winners.sort((a, b) => b.power - a.power);
     winners = winners.filter((winner, index) => index < 3);
-    winnersList.innerHTML += "<h3>I vincitori del torneo sono: </h3>"
-    winners.forEach(winner => {
-        winnersList.innerHTML += `<li>${winner.name}</li>`
+    winnersTitle.innerText = "I vincitori del torneo sono:";
+    winners.forEach((winner,index) => {
+        index == 0 ? winnersList.innerHTML += `<li class="list-group-item list-group-item-warning">${winner.name}</li>`:
+        index === 1 ? winnersList.innerHTML += `<li class="list-group-item list-group-item-secondary">${winner.name}</li>`:
+        winnersList.innerHTML += `<li class="list-group-item list-group-item-danger">${winner.name}</li>`
     })
 }

@@ -8,13 +8,14 @@
     <title>Boolokai Boolkaichi</title>
 </head>
 
-<body class="container d-flex flex-column text-center">
+<body class="container d-flex flex-column text-center my-3">
     <div>
-        <button id="start">START</button>
-        <button class="phases" id="phase1" disabled>1</button>
-        <button class="phases" id="phase2" disabled>2</button>
-        <button class="phases" id="phase3" disabled>3</button>
-        <button class="phases" id="phase4" disabled>4</button>
+        <button id="start" class="btn btn-danger btn-lg mx-3">START</button>
+        <button class="phases btn btn-danger btn-lg rounded-end-0" id="phase1" disabled>1</button>
+        <button class="phases btn btn-danger btn-lg rounded-0" id="phase2" disabled>2</button>
+        <button class="phases btn btn-danger btn-lg rounded-0" id="phase3" disabled>3</button>
+        <button class="phases btn btn-danger btn-lg rounded-start-0" id="phase4" disabled>4</button>
+        <p class="my-2">Naviga attraverso le fasi del torneo usando questi bottoni.</p>
     </div>
     <div class="p-5">
         <h3 id="title" class="mb-3"></h3>
@@ -25,7 +26,10 @@
             <tbody id="tableBody">
             </tbody>
         </table>
-        <ol id="winners"></ol>
+        <h3 id="winnersTitle" class="mb-3"></h3>
+        <div class="d-flex justify-content-center">
+            <ol id="winners" class="list-group list-group-numbered list-group-horizontal"></ol>
+        </div>
     </div>
 
     <script src="js/index.js" type="module"></script>
